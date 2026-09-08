@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Love</title>
+    <style>
+        /* Mengambil font estetik dari Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap');
+
+        :root {
+            --bg-color: #ffe6eb;
+            --primary-color: #ff85a2;
+            --text-color: #ff4d79;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            /* Mencegah scroll */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Styling untuk setiap halaman/scene */
+        section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        section.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 20;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Tombol */
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Desain Amplop (Scene 1) */
+        .envelope-wrapper {
+            position: relative;
+            width: 250px;
+            height: 160px;
+            background: #ffb3c6;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .envelope-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-right: 125px solid transparent;
+            border-left: 125px solid transparent;
+            border-top: 90px solid #ff99b3;
+            z-index: 2;
+        }
+
+        .envelope-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-right: 125px solid transparent;
+            border-left: 125px solid transparent;
+            border-bottom: 90px solid #ff85a2;
+            z-index: 1;
+        }
+
+        .seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: #ff3366;
+            border-radius: 50%;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Kartu Ucapan */
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(255, 133, 162, 0.15);
+            max-width: 90%;
+        }
+
+        /* Buku Diary (Terkunci) */
+        .diary {
+            width: 220px;
+            height: 300px;
+            background: linear-gradient(135deg, #d6336c, #a81c4e);
+            border-radius: 10px 20px 20px 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: inset 10px 0 20px rgba(0, 0, 0, 0.2), 10px 15px 25px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        /* Buku Diary (Terbuka) */
+        .diary-open {
+            background: #fff0f3;
+            width: 90%;
+            max-width: 320px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(255, 133, 162, 0.2);
+            text-align: left;
+        }
+
+        /* Foto Polaroid */
+        .polaroid {
+            background: white;
+            padding: 15px 15px 45px 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            transform: rotate(-3deg);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        /* Gelembung Harapan */
+        .bubbles-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .bubble {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(255, 133, 162, 0.1);
+        }
+
+        .bubble:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Animasi Mengambang */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Background Love Melayang */
+        .bg-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 179, 198, 0.6);
+            animation: rise infinite linear;
+        }
+
+        @keyframes rise {
+            0% {
+                top: 110%;
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                top: -10%;
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        /* Tombol Musik Mengambang */
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border: 2px solid var(--primary-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(255, 133, 162, 0.35);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .music-btn.playing {
+            animation: spinMusic 3.5s linear infinite;
+        }
+
+        @keyframes spinMusic {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Tombol Musik -->
+    <div class="music-btn" id="music-toggle" onclick="toggleMusic()" title="Putar / Jeda Musik">
+        🎵
+    </div>
+
+    <!-- Audio Element untuk lagu "Semua Aku Dirayakan - Nadin Amizah" -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="lagu.mp3" type="audio/mpeg">
+        <source
+            src="https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/98/be/b2/98beb2bf-878a-0e2c-6167-fec0d2f4fc87/mzaf_13873619236384310046.plus.aac.p.m4a"
+            type="audio/mp4">
+    </audio>
+
+    <!-- Background Hati -->
+    <div class="bg-hearts" id="bg-hearts"></div>
+
+    <div class="container">
+        <!-- Scene 1: Amplop -->
+        <section id="s1" class="active">
+            <h2 style="font-size: 36px; margin-bottom: 30px;">Special Letter for You 💌</h2>
+            <div class="envelope-wrapper" onclick="nextScene('s1', 's2')">
+                <div class="seal">❤</div>
+            </div>
+            <p style="margin-top: 40px; font-weight: 600;">✨</p>
+        </section>
+
+        <!-- Scene 2: Kartu Sapaan -->
+        <section id="s2">
+            <div class="card">
+                <h1>Happy Birthday,<br>Mantan hts q</h1>
+                <p>Aku udaa siapin inii buat kamuuu... tekan tombol di bawah untuk memulai!</p>
+                <button onclick="nextScene('s2', 's3')">Mulai Kejutan &rarr;</button>
+            </div>
+        </section>
+
+        <!-- Scene 3: Buku Terkunci -->
+        <section id="s3">
+            <h2 style="margin-bottom: 20px;">My Secret Diary</h2>
+            <p>Ketuk buku untuk memutar kuncinya & membacanya</p>
+            <div class="diary" onclick="nextScene('s3', 's3-open')">
+                <h2 style="font-family: 'Quicksand'; margin:0; color: white;">My Secret Diary</h2>
+                <div style="font-size: 50px; margin: 25px 0;">🔒</div>
+                <p style="color: rgba(255,255,255,0.8); font-size: 12px; font-weight: bold; letter-spacing: 1px;">TAP TO
+                    UNLOCK & OPEN</p>
+            </div>
+        </section>
+
+        <!-- Scene 4: Buku Terbuka -->
+        <section id="s3-open">
+            <div class="diary-open">
+                <h2 style="color: var(--text-color); font-size: 28px;">HAPPY SWEET SEVENTEEN YAA</h2>
+                <p>happy birthday semoga kebahagiaan always datang ke kamu yaaa, walaupun kita uda gabisa sama sama
+                    lagi seengganya aku pernah menjadi salah satu bagian dari hidup kamu, aku engaa bakal lupa sama hari
+                    spesial kmuu.. semua tentang kamu masi tertata rapih di sini, aku senang bisa ngeliat kamu uda baik
+                    baik aja tanpa adanya aku lagi di hidup kamu.. bahkan aku ngerasa malu klo aku selalu bilang kalo
+                    sampai saat ini pun i still love u, tapi setelah ini aku bakalan pastiin kalo aku harus bisa baik
+                    baik aja kan?kehidupan akan terus berjalan. be happy ya,</p>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button onclick="nextScene('s3-open', 's4')">See Our Memories &rarr;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 5: Memori Foto -->
+        <section id="s4">
+            <h2>Our Memories</h2>
+            <p>Ketuk foto ini untuk melanjutkan!</p>
+            <div class="polaroid" onclick="nextScene('s4', 's5')">
+                <img src="foto1.jpg" alt="Memory"
+                    style="width: 220px; height: 220px; object-fit: cover; border-radius: 5px; display: block;">
+                <h3
+                    style="margin: 15px 0 0 0; font-family: 'Dancing Script'; font-size: 24px; color: var(--text-color);">
+                    inii pertama kali kita pindah wa lucuuu</h3>
+            </div>
+        </section>
+
+        <!-- Scene 6: Kue Ulang Tahun -->
+        <section id="s5">
+            <h2>Time for Cake!</h2>
+            <p>Make a wish (Buat harapan) lalu ketuk kuenya!</p>
+            <div style="font-size: 150px; cursor: pointer; animation: float 3s ease-in-out infinite; margin-top: 20px;"
+                onclick="nextScene('s5', 's6')">
+                🎂
+            </div>
+        </section>
+
+        <!-- Scene 7: Harapan Mengambang -->
+        <section id="s6">
+            <h2>Floating Wishes</h2>
+            <p>Pecahkan gelembung untuk melihat harapanku untukmu!</p>
+            <div class="bubbles-container">
+                <div class="bubble"
+                    onclick="showWish('Semoga kamu selalu diberikan kesehatan, panjang umur, dan bahagia selalu! 💕')">
+                    Stay Healthy</div>
+                <div class="bubble"
+                    onclick="showWish('Semoga sukses dan dilancarkan dalam segala urusan, maupun karir kedepannya! ✨')">
+                    Be Successful</div>
+                <div class="bubble"
+                    onclick="showWish('Semoga keberadaan kamu selalu di kelilingi orang baik selamanya! 💖')">
+                    Forever Us</div>
+            </div>
+            <div class="card" id="wish-card" style="display: none; margin-top: 20px; padding: 20px;">
+                <p id="wish-text" style="font-weight: 600; color: var(--text-color); font-size: 16px;"></p>
+                <button onclick="nextScene('s6', 's7')">Satu Hal Lagi &rarr;</button>
+            </div>
+        </section>
+
+        <!-- Scene 8: Pesan Terakhir -->
+        <section id="s7">
+            <div class="card">
+                <h2 style="font-size: 38px; margin-bottom: 10px;">I Love You! ❤️</h2>
+                <p style="font-weight: bold; font-size: 18px; color: var(--text-color); margin: 0;">Happy Birthday,
+                    Mantan hts q.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Setup Musik
+        const audio = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        let isMusicPlaying = false;
+
+        function playMusic() {
+            if (isMusicPlaying) return;
+
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isMusicPlaying = true;
+                    musicToggle.classList.add('playing');
+                    musicToggle.innerHTML = '🎵';
+                }).catch(e => {
+                    console.log('Perlu interaksi klik untuk memutar audio:', e);
+                });
+            }
+        }
+
+        function pauseMusic() {
+            audio.pause();
+            isMusicPlaying = false;
+            musicToggle.classList.remove('playing');
+            musicToggle.innerHTML = '🔇';
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                pauseMusic();
+            } else {
+                playMusic();
+            }
+        }
+
+        // Putar musik otomatis saat interaksi pertama layar (ketuk amplop / layar)
+        document.addEventListener('click', function () {
+            if (!isMusicPlaying) {
+                playMusic();
+            }
+        }, { once: true });
+
+        // Fungsi untuk berpindah antar halaman/scene
+        function nextScene(currentId, nextId) {
+            playMusic();
+            document.getElementById(currentId).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(nextId).classList.add('active');
+            }, 600); // Waktu transisi fade out
+        }
+
+        // Fungsi untuk menampilkan teks harapan saat gelembung diklik
+        function showWish(text) {
+            document.getElementById('wish-text').innerText = text;
+            document.getElementById('wish-card').style.display = 'block';
+        }
+
+
+        // Membuat efek hati yang melayang dari bawah ke atas di background
+        function createHearts() {
+            const container = document.getElementById('bg-hearts');
+            for (let i = 0; i < 20; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+    </script>
+</body>
+
+</html>
